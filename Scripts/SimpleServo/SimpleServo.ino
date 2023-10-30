@@ -7,9 +7,10 @@ Initialize Hummingbird ports
 
 #define GET_LENGTH(arr) sizeof(arr) / sizeof(arr[0])
 
-#define BUFFER_SIZE 10
+#define BUFFER_SIZE 5 // old = 10
 #define LIGHT_SENSOR_THRESHOLD 30
 #define DISTANCE_SENSOR_THRESHOLD 30
+
 
 typedef struct {
   int buffer[BUFFER_SIZE]; // Holds data for running average
@@ -38,6 +39,17 @@ typedef struct {
   stateCodes dst;
 } transition;
 
+// Global vars
+stateCodes currentState; // Holds the current state
+stateReturnCodes currentStateReturn; // Holds return value of current state once the stateFunc has executed
+int (* stateFunc)(void); // Holds current state function
+
+// ==== DECLARE SENSORS ====
+Sensor distanceSensor;
+Sensor lineSensor;
+Sensor lineSensor2;
+// =========================
+
 void initSensor(Sensor* s) {
   // Initialize all elements of the ra buffer to 0
   for (int i = 0; i < BUFFER_SIZE; i++) {
@@ -58,18 +70,15 @@ void updateRunningAverage(Sensor* s, int newValue) {
   s->avg = s->sum / BUFFER_SIZE; // Update average
 }
 
-// ==== DECLARE SENSORS ====
-Sensor distanceSensor;
-Sensor lightSensor;
-// =========================
-
 // STATE FUNCTIONS
 
 int entryState() { // Program start
-  hummingbird.setMotor(1, 255);
-  hummingbird.setMotor(2, 255);
-  Serial.println("ENTRY");
-  return OK;
+  Serial.print(lineSensor.avg); Serial.print(" ");
+  Serial.println(lineSensor2.avg);
+  //hummingbird.setMotor(1, 255);
+  //hummingbird.setMotor(2, 255);
+  //Serial.println("ENTRY");
+  return REPEAT;
 }
 
 int exitState() { // Program end
@@ -115,10 +124,7 @@ stateCodes lookupTransitions(stateCodes currentState, stateReturnCodes returnCod
   return ESCAPE;
 }
 
-// Global vars
-stateCodes currentState; // Holds the current state
-stateReturnCodes currentStateReturn; // Holds return value of current state once the stateFunc has executed
-int (* stateFunc)(void); // Holds current state function
+
 
 void setup()
 {
@@ -127,7 +133,11 @@ void setup()
 
   // ==== INIT SENSORS ====
   initSensor(&distanceSensor);
-  initSensor(&lightSensor);
+  initSensor(&lineSensor);
+  initSensor(&lineSensor2);
+
+  hummingbird.setTriColorLED(1, 255, 255, 255);
+  hummingbird.setTriColorLED(2, 255, 255, 255);
   // ======================
 
   currentState = ENTRY;
@@ -135,12 +145,10 @@ void setup()
 
 void loop()
 {
-
   // Update sensor values
   updateRunningAverage(&distanceSensor, hummingbird.readSensorValue(0));
-  updateRunningAverage(&lightSensor, hummingbird.readSensorValue(1));
-
-  Serial.println()
+  updateRunningAverage(&lineSensor, hummingbird.readSensorValue(1));
+  updateRunningAverage(&lineSensor2, hummingbird.readSensorValue(2));
 
   // Run state machine
   Serial.write(currentState);
