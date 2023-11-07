@@ -19,4 +19,15 @@ typedef struct {
   stateCodes dest;
 } transition;
 
+transition stateTransitions[] = {
+  {START, FAIL, STOP},
+  {START, PASS, SEARCH},
+  {SEARCH, FAIL, SEARCH},
+  {SEARCH, PASS, ATTACK},
+  {ATTACK, FAIL, SEARCH},
+  {ATTACK, PASS, ATTACK}
+}
+
+stateCodes lookupTransitions(stateCodes currentState, stateReturnCodes returnCode);
+
 #endif
