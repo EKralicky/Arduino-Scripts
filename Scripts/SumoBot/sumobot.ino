@@ -5,18 +5,6 @@ Hummingbird hummingbird;
 Initialize Hummingbird ports
 */
 
-#define GET_LENGTH(arr) sizeof(arr) / sizeof(arr[0])
-
-#define BUFFER_SIZE 10
-#define LIGHT_SENSOR_THRESHOLD 30
-#define DISTANCE_SENSOR_THRESHOLD 30
-
-typedef struct {
-  int buffer[BUFFER_SIZE]; // Holds data for running average
-  int sum; // Current total sum of the running average
-  int bp; // Current buffer position in the buffer
-  int avg; // Current average value of the sensor
-} Sensor;
 
 typedef enum {
   ENTRY,
@@ -63,34 +51,34 @@ Sensor distanceSensor;
 Sensor lightSensor;
 // =========================
 
-// STATE FUNCTIONS
+// // STATE FUNCTIONS
 
-int entryState() { // Program start
-  hummingbird.setMotor(1, 255);
-  hummingbird.setMotor(2, 255);
-  Serial.println("ENTRY");
-  return OK;
-}
+// int entryState() { // Program start
+//   hummingbird.setMotor(1, 255);
+//   hummingbird.setMotor(2, 255);
+//   Serial.println("ENTRY");
+//   return OK;
+// }
 
-int exitState() { // Program end
-  delay(1000);
-  hummingbird.setMotor(1, -255);
-  hummingbird.setMotor(2, -255);
-  Serial.println("EXIT");
-  return REPEAT;
-}
+// int exitState() { // Program end
+//   delay(1000);
+//   hummingbird.setMotor(1, -255);
+//   hummingbird.setMotor(2, -255);
+//   Serial.println("EXIT");
+//   return REPEAT;
+// }
 
-int searchState() {
-  return 1;
-}
+// int searchState() {
+//   return 1;
+// }
 
-int attackState() {
-  return 1;
-}
+// int attackState() {
+//   return 1;
+// }
 
-int recoveryState() {
- return 1;
-}
+// int recoveryState() {
+//  return 1;
+// }
 
 
 // END STATE FUNCTIONS

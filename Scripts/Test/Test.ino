@@ -22,6 +22,7 @@ Author: Tom Lauwers (tom@hummingbirdkit.com)
 */
 
 #include <Hummingbird.h>
+#include <Vector>
 Hummingbird hummingbird;
 
 /*
