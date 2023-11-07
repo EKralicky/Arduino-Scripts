@@ -19,3 +19,4 @@ typedef struct {
   stateCodes dest;
 } transition;
 
+#endif
