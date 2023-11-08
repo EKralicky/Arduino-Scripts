@@ -15,7 +15,7 @@ typedef struct {
   int pin;
 } Sensor;
 
-void initSensor(Sensor *s, char pin, int min, int max);
-void updateRunningAverage(Sensor *s, int newValue);
+void initSensor(Sensor *s, char pin, int min, int max); // Initialize Sensor structure
+void updateRunningAverage(Sensor *s, int newValue); // Update running average, called once per clock cycle
 
 #endif
