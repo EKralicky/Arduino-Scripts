@@ -1,15 +1,17 @@
 #include "sensor_sumo.h"
 
 void initSensor(Sensor *s, char pin, int min, int max) {
+    // Initialize Sensor structure with builtin rolling average for low pass filter effects
+    // to remove high frequency noise
     for (int i=0; i < BUFFER_SIZE; i++) {
         s->buffer[i] = 0;
     }
     s->sum = 0;
     s->bp = 0;
     s->avg = 0;
-    s->min = min;
-    s->max = max;
-    s->pin = pin;
+    s->min = min; // Minimum range to map
+    s->max = max; // Maximum range to map
+    s->pin = pin; // Pin number the sensor is attached to. Uses Hummingbird conventions
 }
 
 void updateRunningAverage(Sensor *s, int newValue) {
