@@ -3,7 +3,7 @@
 void initSensor(Sensor *s, char pin, int min, int max) {
     // Initialize Sensor structure with builtin rolling average for low pass filter effects
     // to remove high frequency noise
-    for (int i=0; i < BUFFER_SIZE; i++) {
+    for (int i=0; i < BUFFER_SIZE; i++) { // could use memset() from <string.h>
         s->buffer[i] = 0;
     }
     s->sum = 0;
